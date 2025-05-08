@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Parcel
+.parcel-cache/
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Build output (if you ever use a different output directory name like 'build')
+/build/
+
+# Environment variables file
+.env
+.env*.local 
