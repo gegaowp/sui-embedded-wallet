@@ -4,12 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sui Wallet Example</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .container { margin-bottom: 40px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        h1, h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        label { display: block; margin-top: 10px; margin-bottom: 5px; font-weight: bold; }
+        input[type=\"text\"], textarea { width: 95%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top:10px; }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; }
+        hr { margin-top: 30px; margin-bottom: 30px; }
+    </style>
 </head>
 <body>
-    <h1>Sui Wallet Details:</h1>
-    <p><strong>Mnemonic:</strong> <span id="mnemonic">Loading...</span></p>
-    <p><strong>Re-encoded Bech32 Private Key:</strong> <span id="reEncodedBech32">Loading...</span></p>
-    <p><strong>Sui Address:</strong> <span id="address">Loading...</span></p>
+
+    <div class="container">
+        <h2>Create New Wallet</h2>
+        <p><strong>Mnemonic:</strong> <span id="mnemonic">Loading...</span></p>
+        <p><strong>Re-encoded Bech32 Private Key:</strong> <span id="reEncodedBech32">Loading...</span></p>
+        <p><strong>Sui Address:</strong> <span id="address">Loading...</span></p>
+        <p><small>Refresh page to generate a new wallet.</small></p>
+    </div>
+
+    <hr />
+
+    <div class="container">
+        <h2>Sign & Send Transaction</h2>
+        <div>
+            <label for="txnMnemonic">Your Mnemonic:</label>
+            <textarea id="txnMnemonic" rows="3" placeholder="Enter your wallet mnemonic phrase..."></textarea>
+        </div>
+        <div>
+            <label for="network">Network:</label>
+            <select id="network">
+                <option value="testnet" selected>Testnet</option>
+                <option value="mainnet">Mainnet</option>
+                <option value="devnet">Devnet</option>
+            </select>
+        </div>
+        <div>
+            <label for="recipientAddress">Recipient Sui Address:</label>
+            <input type="text" id="recipientAddress" placeholder="0x..." />
+        </div>
+        <div>
+            <label for="amountSUI">Amount (SUI):</label>
+            <input type="text" id="amountSUI" value="0.053" />
+        </div>
+        <button id="sendTxnButton">Sign & Send Transaction</button>
+        <h3>Transaction Result:</h3>
+        <pre id="txnResult">Waiting for transaction...</pre>
+    </div>
 
     <script type="module" src="./index.ts"></script>
 </body>
