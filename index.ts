@@ -115,6 +115,52 @@ async function handleSignAndSendTransaction() {
   }
 }
 
+// --- Function to derive keypair from custom mnemonic ---
+async function handleDeriveFromMnemonic() {
+  const mnemonicInputEl = document.getElementById('customMnemonicInput') as HTMLTextAreaElement;
+  const privateKeyOutputEl = document.getElementById('customPrivateKeyOutput');
+  const addressOutputEl = document.getElementById('customAddressOutput');
+  const deriveResultEl = document.getElementById('customDeriveResult');
+
+  if (!mnemonicInputEl || !privateKeyOutputEl || !addressOutputEl || !deriveResultEl) {
+    console.error('One or more custom derivation UI elements are missing');
+    if(deriveResultEl) deriveResultEl.textContent = 'Error: UI elements for custom derivation are missing.';
+    return;
+  }
+
+  const inputMnemonic = mnemonicInputEl.value.trim();
+
+  if (!inputMnemonic) {
+    deriveResultEl.textContent = 'Please enter a mnemonic.';
+    privateKeyOutputEl.textContent = '';
+    addressOutputEl.textContent = '';
+    return;
+  }
+
+  deriveResultEl.textContent = 'Deriving keypair...';
+  privateKeyOutputEl.textContent = '';
+  addressOutputEl.textContent = '';
+
+  try {
+    const keypair = Secp256k1Keypair.deriveKeypair(inputMnemonic);
+    const derivedPrivateKey = keypair.getSecretKey();
+    const derivedAddress = keypair.getPublicKey().toSuiAddress();
+
+    if (privateKeyOutputEl) privateKeyOutputEl.textContent = `Derived Private Key (Bech32): ${derivedPrivateKey}`;
+    if (addressOutputEl) addressOutputEl.textContent = `Derived Sui Address: ${derivedAddress}`;
+    deriveResultEl.textContent = 'Successfully derived keypair from mnemonic.';
+    console.log("Derived from custom mnemonic - Private Key:", derivedPrivateKey);
+    console.log("Derived from custom mnemonic - Address:", derivedAddress);
+
+  } catch (error: any) {
+    console.error('Derivation from custom mnemonic failed:', error);
+    deriveResultEl.textContent = `Derivation Failed:
+${error.message ? error.message : error.toString()}`;
+    if (privateKeyOutputEl) privateKeyOutputEl.textContent = '';
+    if (addressOutputEl) addressOutputEl.textContent = '';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Wallet Creation Part
   const mnemonicEl = document.getElementById('mnemonic');
@@ -136,5 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
     sendTxnButton.addEventListener('click', handleSignAndSendTransaction);
   } else {
     console.error("Element with ID 'sendTxnButton' not found.");
+  }
+
+  // Derivation from Custom Mnemonic Part
+  const deriveCustomButton = document.getElementById('deriveFromMnemonicButton');
+  if (deriveCustomButton) {
+    deriveCustomButton.addEventListener('click', handleDeriveFromMnemonic);
+  } else {
+    console.error("Element with ID 'deriveFromMnemonicButton' not found.");
   }
 });
